@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+{% if group.admin == user.username %}
+<ul class="nav justify-content-end bg-light">
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'general:createevent' slug=group.slug %}">+ Create Event</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
+  </li>
+</ul>
+{% endif %}
+<div class="container">
+  {% if group.admin == user.username %}
+  <h2 class="text-white my-5">{{group.name}}</h2>
+
+  <div class="my-3">
+    You are the admin of the group
+    <br>
+    Share this link for your members to join
+    <br>
+    <span class="text-light text-decoration-underline">http://{{ current_site.domain }}{% url 'accounts:join' slug=group.slug %}</span>
+  </div>
+  {% elif user in group.members.all %}
+  <h2 class="text-white my-5">{{group.name}}</h2>
+  <a href="{% url 'accounts:leave' slug=group.slug %}"><button type="button" name="button">Leave Group</button></a>
+  {% endif %}
+  {% if events %}
+  <h5 class="text-white">Events</h5>
+  <table class="table w-75">
+    <thead>
+      <tr>
+        <th scope="col">Title </th>
+        <th scope="col">Description</th>
+        <th scope="col">Timing</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in events %}
+        <tr>
+          <td scope="row"><a href="{% url 'general:event' id=i.id %}">{{ i.title }}</a></td>
+          <td>{{ i.description }}</td>
+          <td>{{ i.start_time }}-{{ i.end_time }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {% if group.members.all %}
+  <h5 class="text-white">Members</h5>
+  <table class="table w-75">
+    <thead>
+      <tr>
+        <th scope="col">Username </th>
+        <th scope="col">Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in group.members.all %}
+      <tr>
+        <td scope="row">{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</div>
+{% endblock %}

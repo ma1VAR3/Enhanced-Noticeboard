@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% if event.group.admin == user.username %}
+<ul class="nav justify-content-end bg-light">
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'general:updateevent' id=event.id %}">Update Event</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'general:removeevent' id=event.id %}">Remove Event</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
+  </li>
+</ul>
+{% endif %}
+<div class="container">
+  <h3>{{ event.title }}</h3>
+  <p>{{ event.description }}</p>
+  <h5>Timing : {{ event.start_time }}-{{ event.end_time }}</h5>
+  {% if event.group.admin == user.username %}
+  {% for i in faqs %}
+  <a href="{% url 'general:answerfaq' id=i.id %}">{{ i.question }}{{ i.created_date }}</a><br>
+  {% if i.answer %}<p>{{ i.answer }}{{ i.modified_date }}</p>{% endif %}
+
+  {% endfor %}
+  {% elif user in event.group.members.all %}
+  {% for i in faqs %}
+  <p>{{ i.question }}{{ i.created_date }}</p>
+  {% if i.answer %}<p>{{ i.answer }}{{ i.modified_date }}</p>{% endif %}
+  {% endfor %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-light mt-3" name="button">Ask</button>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

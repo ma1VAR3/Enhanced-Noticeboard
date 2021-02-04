@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="ripple-background">
+  <div class="">
+
+  </div>
+  <div class="circle xxlarge shade1">
+
+  </div>
+  <div class="circle xlarge shade2">
+
+  </div>
+  <div class="circle large shade3">
+
+  </div>
+  <div class="circle mediun shade4">
+
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+
+    </div>
+    <div class="col-6 mt-5">
+      <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-light mt-3" name="button">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

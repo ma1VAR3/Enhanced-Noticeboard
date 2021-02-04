@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h5>{{ faq.question }}</h5>
+  <form method="post">
+    {% csrf_token %}
+    <textarea name="answer" rows="8" cols="80">{% if faq.answer %}{{ faq.answer }}{% endif %}</textarea>
+    <button type="submit" name="button">Submit</button>
+  </form>
+</div>
+{% endblock %}
